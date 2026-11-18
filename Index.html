@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admosfera Green</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f6ee;--ink:#17261c;--muted:#5a6b5f;--surface:#fff;--line:#d5dfcf;--deep:#10281b;--on-deep:#eef5e6;
+  --accent:#6f9a2e;--accent-ink:#10281b;--tint:#e6efd8;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1a12;--ink:#e8f0df;--muted:#9fb1a3;--surface:#15271b;--line:#27402f;--tint:#1a3322}}
+:root[data-theme="dark"]{--bg:#0d1a12;--ink:#e8f0df;--muted:#9fb1a3;--surface:#15271b;--line:#27402f;--tint:#1a3322}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body[data-s="inicio"]{--accent:#8fbf3f;--tint:#e6efd8}
+body[data-s="atmosfera"]{--accent:#2f9e8a;--tint:#d8efe9}
+body[data-s="ubicacion"]{--accent:#d19a2a;--tint:#f3ead3}
+body[data-s="platos"]{--accent:#d9663d;--tint:#f5e0d6}
+body[data-s="reservaciones"]{--accent:#7aa84a;--tint:#e3efd2}
+body[data-s="contacto"]{--accent:#4c8fb0;--tint:#d9e8ef}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{--tint:#1a3322}}
+*{box-sizing:border-box;margin:0}
+body{font:16px/1.6 "DM Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);transition:background .6s}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.1}
+h2{font-size:clamp(1.9rem,5vw,3rem);margin-bottom:.6rem}
+p{max-width:60ch}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+/* Menú superior */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--deep);color:var(--on-deep);display:flex;align-items:center;gap:1rem;padding:.7rem clamp(1rem,4vw,2.5rem)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--deep);z-index:30}
+.logo{font:600 1.25rem Fraunces,serif;white-space:nowrap;display:flex;align-items:center;gap:.5rem}
+.logo i{width:.7rem;height:.7rem;border-radius:50% 0 50% 0;background:var(--accent);transition:background .6s;display:inline-block}
+nav{display:flex;gap:.25rem;overflow-x:auto;margin-left:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{background:none;border:0;color:inherit;font:500 .92rem "DM Sans",sans-serif;padding:.55rem .9rem;border-radius:2rem;cursor:pointer;white-space:nowrap;position:relative;transition:background .25s}
+nav button:hover{background:rgba(255,255,255,.1)}
+nav button[aria-current="true"]{background:var(--accent);color:var(--accent-ink);transition:background .4s}
+
+/* Secciones */
+main section{display:none;min-height:70vh}
+main section.active{display:block;animation:fade .5s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wrap{max-width:1100px;margin:0 auto;padding:clamp(2rem,6vw,4.5rem) clamp(1rem,4vw,2rem)}
+.lead{color:var(--muted);font-size:1.1rem}
+
+/* Botones */
+.btn{display:inline-block;border:0;border-radius:2rem;padding:.8rem 1.5rem;font:700 1rem "DM Sans",sans-serif;cursor:pointer;background:var(--accent);color:var(--accent-ink);transition:transform .2s,background .4s,box-shadow .2s;text-decoration:none}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px -8px var(--accent)}
+.btn.ghost{background:transparent;color:inherit;border:1.5px solid currentColor}
+.row{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.4rem}
+
+/* Espacios para imagen */
+.slot{position:relative;width:100%;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,var(--tint),var(--line));display:grid;place-items:center;transition:background .6s}
+.slot:empty::before{content:"＋ " attr(data-ph);color:var(--muted);font-size:.9rem;text-align:center;padding:1rem;border:1.5px dashed var(--muted);border-radius:10px}
+.slot img,.slot video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* Inicio carrusel */
+.hero{background:var(--deep);color:var(--on-deep)}
+.hero .wrap{display:grid;gap:2.5rem;grid-template-columns:1fr;align-items:center}
+@media(min-width:860px){.hero .wrap{grid-template-columns:1fr 1.1fr}}
+.hero h1{font-size:clamp(2.6rem,7vw,4.6rem);margin-bottom:1rem}
+.hero p{color:#b9cbbd}
+.hero .btn.ghost{color:var(--on-deep)}
+.carousel{position:relative;border-radius:18px;overflow:hidden;background:#0a1a10}
+.track{display:flex;transition:transform .8s cubic-bezier(.6,.05,.2,1)}
+.slide{min-width:100%;position:relative}
+.slide .slot{aspect-ratio:16/11;border-radius:0}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:2.5rem 1.2rem 1rem;background:linear-gradient(transparent,rgba(5,15,9,.8));color:#fff;font-size:.95rem}
+.arrow{position:absolute;top:50%;translate:0 -50%;width:2.6rem;height:2.6rem;border-radius:50%;border:0;background:rgba(255,255,255,.85);color:#10281b;font-size:1.2rem;cursor:pointer;transition:background .2s,scale .2s}
+.arrow:hover{background:#fff;scale:1.08}
+.arrow.prev{left:.7rem}.arrow.next{right:.7rem}
+.dots{position:absolute;top:.8rem;right:.9rem;display:flex;gap:.4rem}
+.dots button{width:.55rem;height:.55rem;padding:0;border:0;border-radius:1rem;background:rgba(255,255,255,.5);cursor:pointer;transition:width .3s,background .3s}
+.dots button[aria-current="true"]{width:1.6rem;background:var(--accent)}
+
+/* Atmósfera */
+.cols{display:grid;gap:1.4rem;margin-top:2rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1rem;transition:border-color .3s,transform .3s}
+.card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.card h3{font-size:1.25rem;margin:.9rem 0 .3rem}
+.card p{color:var(--muted);font-size:.95rem}
+.band{background:var(--tint);transition:background .6s}
+
+/* Platos */
+.price{font:600 1.1rem Fraunces,serif;color:var(--ink);margin-top:.6rem}
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.6rem}
+.tag{font-size:.78rem;padding:.15rem .6rem;border-radius:2rem;background:var(--tint);color:var(--ink);transition:background .6s}
+
+/* Ubicación */
+.info{display:grid;gap:2rem;margin-top:2rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+table{border-collapse:collapse;width:100%}
+td{padding:.65rem 0;border-bottom:1px solid var(--line)}
+td:last-child{text-align:right;font-weight:500}
+tr.today td{color:var(--accent);font-weight:700}
+.slot.map{aspect-ratio:16/11}
+
+/* Reservaciones y contacto */
+form{display:grid;gap:1rem;max-width:520px;margin-top:1.5rem}
+label{display:grid;gap:.3rem;font-weight:500;font-size:.92rem}
+input,select,textarea{font:inherit;padding:.75rem .9rem;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);transition:border-color .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.ok{display:none;padding:1rem;border-radius:10px;background:var(--tint);margin-top:1rem;max-width:520px}
+.ok.show{display:block;animation:fade .5s}
+
+footer{background:var(--deep);color:var(--on-deep);padding:2.5rem clamp(1rem,4vw,2.5rem) 1.5rem}
+.foot{max-width:1100px;margin:0 auto;display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+footer h3{font-size:1.1rem;margin-bottom:.5rem}
+footer p,footer a{color:#b9cbbd;font-size:.92rem;display:block;text-decoration:none;margin-bottom:.25rem}
+footer a:hover{color:#fff}
+.copy{max-width:1100px;margin:1.5rem auto 0;padding-top:1rem;border-top:1px solid rgba(255,255,255,.15);font-size:.85rem;color:#8fa596}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body data-s="inicio">
+
+<header>
+  <div class="logo"><i></i>Green Gourmet</div>
+  <nav aria-label="Secciones">
+    <button data-go="inicio">Inicio</button>
+    <button data-go="atmosfera">Atmósfera Green</button>
+    <button data-go="ubicacion">Ubicación y horarios</button>
+    <button data-go="platos">Platos destacados</button>
+    <button data-go="reservaciones">Reservaciones</button>
+    <button data-go="contacto">Contacto</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- INICIO -->
+<section id="inicio" class="hero">
+  <div class="wrap">
+    <div>
+      <h1>La mejor cocina </h1>
+      <p class="lead">Ingredientes de temporada, brasas lentas y un ambiente agradable. Ven a comer con nosotros.</p>
+      <div class="row">
+        <button class="btn" data-go="reservaciones">Reservar mesa</button>
+        <button class="btn ghost" data-go="platos">Ver platos destacados</button>
+      </div>
+    </div>
+    <div class="carousel" aria-roledescription="carrusel" aria-label="Galería del restaurante">
+      <div class="track">
+        <div class="slide"><div class="slot" data-ph="Imagen 1"><img src="Ambiente del restaurant 1.png" alt="restaurant"></div><p class="cap">instalaciones</p></div>
+        <div class="slide"><div class="slot" data-ph="Imagen 2"><img src="Barra bebida_cafeteria.png" alt="restaurant"></div><p class="cap">cafeteria</p></div>
+        <div class="slide"><div class="slot" data-ph="Imagen 3"><img src="boton atmosfera green.png" alt="restaurant"></div><p class="cap">Logo</p></div>
+        <div class="slide"><div class="slot" data-ph="imagen 4"><img src="disfrutando1.jpg" alt="restaurant"></div><p class="cap">Cocina</p></div>
+      </div>
+      <button class="arrow prev" aria-label="Anterior">‹</button>
+      <button class="arrow next" aria-label="Siguiente">›</button>
+      <div class="dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ATMÓSFERA GREEN -->
+<section id="atmosfera">
+  <div class="wrap">
+    <h2>Atmósfera Green</h2>
+    <p class="lead">Un lugar para compartir en familia donde convinamos la alta cocina con la mejor hospitalidad</p>
+    <div class="cols">
+      <article class="card"><div class="slot" data-ph="Img"><img src="fondo1.jpg" alt="restaurant"></div><h3>Un hambiente familiar</h3><p>Contamos con un hambiente para toda la familia muy acogedor</p></article>
+      <article class="card"><div class="slot" data-ph="Img"><img src="fondo2.jpg" alt="restaurant"></div><h3>Los mejores chefs del Bajio</h3><p>Tenemos a los mejores chefs de todo el bajio cocinando para tu gusto.</p></article>
+      <article class="card"><div class="slot" data-ph="Img"><img src="mostrando lo que es green gourmet.png" alt="restaurant"></div><h3>El lugar mas gourmet</h3><p>El lugar mas Gourmet de todo el bajio.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- UBICACIÓN Y HORARIOS -->
+<section id="ubicacion" class="band">
+  <div class="wrap">
+    <h2>Ubicación y horarios</h2>
+    <p class="lead">Estamos en el centro, a pasos de la fuente de los Leones. Estacionamiento incluido.</p>
+    <div class="info">
+      <div>
+        <table id="horarios">
+          <tr data-d="1"><td>Lunes</td><td>Cerrado</td></tr>
+          <tr data-d="2"><td>Martes</td><td>13:00 – 22:00</td></tr>
+          <tr data-d="3"><td>Miércoles</td><td>13:00 – 22:00</td></tr>
+          <tr data-d="4"><td>Jueves</td><td>13:00 – 22:00</td></tr>
+          <tr data-d="5"><td>Viernes</td><td>13:00 – 23:30</td></tr>
+          <tr data-d="6"><td>Sábado</td><td>12:00 – 23:30</td></tr>
+          <tr data-d="0"><td>Domingo</td><td>12:00 – 18:00</td></tr>
+        </table>
+        <p style="margin-top:1rem"><strong>Dirección:</strong> Calle del Huerto 123, Centro Historico</p>
+      </div>
+      <div class="slot map" data-ph="greenb"><img src="logoCocGour2.png" alt="restaurant"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATOS DESTACADOS -->
+<section id="platos">
+  <div class="wrap">
+    <h2>Platos destacados</h2>
+    <p class="lead">Estos son algunos de nuestros platos.</p>
+    <div class="cols">
+
+      <article class="card">
+        <div class="slot" data-ph="Img"><img src="SopaM.jfif" alt="restaurant"></div>
+        <h3>Concentrado de pescado y camaron</h3>
+        <p>Pescado fresco y camaron bien lavado en un concentrado de verduras frescas </p>
+        <p class="price">$105</p>
+      </article>
+
+       <article class="card">
+        <div class="slot" data-ph="img"><img src="camarones 2.jpg" alt="restaurant"></div>
+        <h3>Camarones salteados</h3>
+        <p>camaron fresco salteado con mantequilla y un poco de pimienta </p>
+        <p class="price">$67</p>
+      </article>
+
+        <article class="card">
+        <div class="slot" data-ph="img"><img src="deliflags1.jpg" alt="restaurant"></div>
+        <h3>Brochetas Gourmet</h3>
+        <p>Brochetas echas de carne de res bien sasonada a la parrilla con pimiento y albaca</p>
+        <p class="price">$45</p>
+      </article>
+
+      <article class="card">
+        <div class="slot" data-ph="Img"><img src="ensalada con pollo asado.jpg" alt="restaurant"></div>
+        <h3>Ensalada de la casa</h3>
+        <p>Pollo frito en freidora de aire sobre una cama de lechuga con un toque de queso de cabra</p>
+        <p class="price">$60</p>
+      </article>
+
+      <article class="card">
+        <div class="slot" data-ph="Img"><img src="rib eye.jpg" alt="restaurant"></div>
+        <h3>Ribye en su jugo</h3>
+        <p>Corte de carne fino cocido unicamente con su jugo y un toque de sal y pimienta</p>
+        <p class="price">$185</p>
+      </article>
+
+       <article class="card">
+        <div class="slot" data-ph="Img"><img src="salmon.jpg" alt="restaurant"></div>
+        <h3>Ensalada Cesar</h3>
+        <p>Ensalada cesar clasica</p>
+        <p class="price">$58</p>
+      </article>
+    </div>
+    <div class="row"><button class="btn" data-go="reservaciones">Reservar para probarlos</button></div>
+  </div>
+</section>
+
+<!-- RESERVACIONES -->
+<section id="reservaciones" class="band">
+  <div class="wrap">
+    <h2>Reservaciones</h2>
+    <p class="lead">Elige día y hora; te confirmamos por teléfono o correo.</p>
+    <form id="resForm" novalidate>
+      <label>Nombre<input name="n" required autocomplete="name"></label>
+      <div class="two">
+        <label>Fecha<input type="date" name="f" required></label>
+        <label>Hora<select name="h"><option>13:00</option><option>14:30</option><option>15:30</option><option>16:30</option><option>17:30</option><option>19:00</option><option>20:30</option></select></label>
+      </div>
+      <label>Personas<select name="p"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select></label>
+      <button class="btn" type="submit">Enviar reservación</button>
+    </form>
+    <p class="ok" id="resOk" role="status"></p>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="wrap">
+    <h2>Contacto</h2>
+    <p class="lead">¿Eventos, grupos o dudas sobre el servicio? Escríbenos.</p>
+    <div class="info">
+      <form id="msgForm" novalidate>
+        <label>Correo<input type="email" name="e" required autocomplete="email"></label>
+        <label>Mensaje<textarea name="m" rows="4" required></textarea></label>
+        <button class="btn" type="submit">Enviar mensaje</button>
+        <p class="ok" id="msgOk" role="status"></p>
+      </form>
+      <div>
+        <p><strong>Teléfono:</strong> +52 5663552649</p>
+        <p><strong>Correo:</strong> Santiuguies360@restaurant.com.mx</p>
+        <p><strong>Instagram:</strong> @Santiuguies</p>
+        <div class="slot" data-ph="Imagen/video del equipo" style="margin-top:1rem"><img src="animación.gif" alt="restaurant"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="foot">
+    <div><h3>Green Gourmet</h3><p>Cocina Gourmet, de temporada y con brasas.</p></div>
+    <div><h3>Secciones</h3><a href="#atmosfera">Atmósfera Green</a><a href="#platos">Platos destacados</a><a href="#reservaciones">Reservaciones</a></div>
+    <div><h3>Visítanos</h3><p>Calle del Huerto 123, Centro Historico</p><p>Mar–Dom · ver horarios</p></div>
+  </div>
+  <p class="copy">© <span id="yr"></span> Green Gourmet. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+const ids=["inicio","atmosfera","ubicacion","platos","reservaciones","contacto"];
+const secs=ids.map(i=>document.getElementById(i));
+const btns=[...document.querySelectorAll("nav button")];
+
+function show(id,push){
+  if(!ids.includes(id))id="inicio";
+  secs.forEach(s=>s.classList.toggle("active",s.id===id));
+  btns.forEach(b=>b.setAttribute("aria-current",b.dataset.go===id));
+  document.body.dataset.s=id;
+  const cur=btns.find(b=>b.dataset.go===id);
+  if(cur&&cur.scrollIntoView)cur.scrollIntoView({inline:"center",block:"nearest"});
+  if(push)try{history.replaceState(null,"","#"+id)}catch(e){}
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-go]");
+  if(t){show(t.dataset.go,true)}
+});
+document.querySelectorAll('footer a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();show(a.getAttribute("href").slice(1),true)}));
+addEventListener("hashchange",()=>show(location.hash.slice(1)));
+show(location.hash.slice(1));
+
+/* Carrusel */
+const car=document.querySelector(".carousel"),track=car.querySelector(".track"),n=track.children.length,dots=car.querySelector(".dots");
+let i=0,timer;
+for(let k=0;k<n;k++){const d=document.createElement("button");d.setAttribute("aria-label","Imagen "+(k+1));d.onclick=()=>go(k,true);dots.appendChild(d)}
+function go(k,user){
+  i=(k+n)%n;
+  track.style.transform="translateX(-"+i*100+"%)";
+  [...dots.children].forEach((d,j)=>d.setAttribute("aria-current",j===i));
+  if(user)restart();
+}
+function restart(){clearInterval(timer);if(!matchMedia("(prefers-reduced-motion:reduce)").matches)timer=setInterval(()=>go(i+1),5000)}
+car.querySelector(".prev").onclick=()=>go(i-1,true);
+car.querySelector(".next").onclick=()=>go(i+1,true);
+car.addEventListener("mouseenter",()=>clearInterval(timer));
+car.addEventListener("mouseleave",restart);
+let x0=null;
+car.addEventListener("touchstart",e=>x0=e.touches[0].clientX,{passive:true});
+car.addEventListener("touchend",e=>{if(x0!==null){const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>40)go(i+(d<0?1:-1),true);x0=null}});
+go(0);restart();
+
+/* Horario */
+const hoy=document.querySelector('#horarios tr[data-d="'+new Date().getDay()+'"]');
+if(hoy)hoy.classList.add("today");
+document.getElementById("yr").textContent=new Date().getFullYear();
+
+/* Formularios */
+function bind(id,okId,msg){
+  const f=document.getElementById(id),ok=document.getElementById(okId);
+  f.addEventListener("submit",e=>{
+    e.preventDefault();
+    const bad=[...f.querySelectorAll("[required]")].find(x=>!x.value.trim());
+    ok.classList.add("show");
+    if(bad){ok.textContent="Completa el campo obligatorio antes de enviar.";bad.focus();return}
+    ok.textContent=msg(new FormData(f));f.reset();
+  });
+}
+bind("resForm","resOk",d=>"¡Gracias, "+d.get("n")+"! Recibimos tu solicitud para "+d.get("p")+" persona(s) el "+d.get("f")+" a las "+d.get("h")+".");
+/* Contacto */
+const WA_NUMERO="525663552649";
+document.getElementById("msgForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const f=e.target,ok=document.getElementById("msgOk");
+  const bad=[...f.querySelectorAll("[required]")].find(x=>!x.value.trim());
+  ok.classList.add("show");
+  if(bad){ok.textContent="Completa el campo obligatorio antes de enviar.";bad.focus();return}
+  const texto="Hola, soy "+f.e.value.trim()+". "+f.m.value.trim();
+  window.open("https://wa.me/"+WA_NUMERO+"?text="+encodeURIComponent(texto),"_blank","noopener");
+  ok.textContent="Abriendo WhatsApp...";
+  f.reset();
+});
+</script>
+</body>
+</html>
